@@ -83,19 +83,19 @@ var results = await Awaiter.all([
 **`all`** - waiting for all of the tasks to complete
 
 ```gdscript
-Awaiter.all(tasks: Array[Signal | Callable])
+Awaiter.all(tasks: Array[Signal | Callable]) -> _TaskManager
 ```
 
 **`any`** - waiting for any of the tasks to complete
 
 ```gdscript
-Awaiter.any(tasks: Array[Signal | Callable])
+Awaiter.any(tasks: Array[Signal | Callable]) -> _TaskManager
 ```
 
 **`some`** - waiting for _\<n\>_ amount of the tasks to complete
 
 ```gdscript
-Awaiter.some(tasks: Array[Signal | Callable], amount_to_complete: int)
+Awaiter.some(tasks: Array[Signal | Callable], amount_to_complete: int) -> _TaskManager
 ```
 
 

@@ -19,6 +19,11 @@ config/tags=PackedStringArray("my_plugin")
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="res://icon.svg"
 
+[display]
+
+window/size/viewport_width=585
+window/size/viewport_height=330
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/awaiter/plugin.cfg")

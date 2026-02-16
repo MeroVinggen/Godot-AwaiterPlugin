@@ -13,6 +13,11 @@
 </p>
 
 
+<p align="center">
+	<img src="./readme_assets/example1.gif" alt="Support me on Ko-fi"/>
+</p>
+
+
 ## See my other plugins
 
 - [Projectile on curve 2D](https://github.com/MeroVinggen/Godot-ProjectileOnCurve2DPlugin)
@@ -25,7 +30,7 @@ Threaded Resource Save-Load](https://github.com/MeroVinggen/Godot-ThreadedResour
 
 ## About
 
-A plugin for managing asynchronous tasks in Godot. Await multiple signals or async calls with intuitive helpers: all(), any(), and some()
+A plugin for managing asynchronous tasks in Godot. Await multiple signals, frames or async calls with intuitive helpers: all(), any(), and some().
 
 
 ## Features
@@ -35,6 +40,7 @@ A plugin for managing asynchronous tasks in Godot. Await multiple signals or asy
 - wait for all async tasks to finish with `Awaiter.all()`
 - wait for any task to finish with `Awaiter.any()`
 - wait for N tasks to finish with `Awaiter.some()`
+- wait for N frames to pass via `Awaiter.process_frames/physics_frames()`
   
 
 ## Requirements 
@@ -77,6 +83,12 @@ var results = await Awaiter.all([
 ]).done
 ```
 
+- awaiting 5 physics frames
+
+```gdscript
+	await Awaiter.physics_frames(5).done
+```
+
 
 ## Methods
 
@@ -96,6 +108,18 @@ Awaiter.any(tasks: Array[Signal | Callable]) -> _TaskManager
 
 ```gdscript
 Awaiter.some(tasks: Array[Signal | Callable], amount_to_complete: int) -> _TaskManager
+```
+
+**`process_frames`** - waiting for _\<n\>_ process frames to pass
+
+```gdscript
+Awaiter.process_frames(target_frames_count: int) -> _FramesAwaiter
+```
+
+**`physics_frames`** - waiting for _\<n\>_ physics frames to pass
+
+```gdscript
+Awaiter.physics_frames(target_frames_count: int) -> _FramesAwaiter
 ```
 
 

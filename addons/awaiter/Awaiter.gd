@@ -25,7 +25,7 @@ static func some(tasks: Array, required_count: int) -> _TaskManager:
 	return task_manger
 
 
-class _TaskManager:
+class _TaskManager extends RefCounted:
 	signal done(result: Array)
 	signal progress(complete: int, total: int)
 	
@@ -35,7 +35,7 @@ class _TaskManager:
 	var _results: Array
 	var _progress_callback: Variant
 	
-	var is_completed = false
+	var is_done = false
 	
 	
 	func _init(total, required_count: int):
@@ -43,10 +43,12 @@ class _TaskManager:
 		_required_count = total if required_count == -1 else required_count
 		_completed_count = 0
 		_results = []
+		
+		reference()
 	
 	
 	func task_completed(...data: Array):
-		if is_completed:
+		if is_done:
 			return
 		
 		_completed_count += 1
@@ -55,9 +57,9 @@ class _TaskManager:
 		progress.emit(_completed_count, _total_count)
 		
 		if _completed_count == _required_count:
-			is_completed = true
+			is_done = true
 			done.emit(_results)
-			#call_deferred("emit_signal", "done", _results)
+			unreference()
 
 
 static func _tasks_runner(tasks: Array, required_count: int, task_manger: _TaskManager) -> void:
@@ -84,3 +86,45 @@ static func _prepare_tasks(tasks: Array, task_manger: _TaskManager) -> Array[Cal
 			task.connect(task_manger.task_completed, CONNECT_ONE_SHOT)
 	
 	return callables
+
+
+# await n process frames
+static func process_frames(target_frames_count: int) -> _FramesAwaiter:
+	return _FramesAwaiter.new(target_frames_count, Engine.get_main_loop().process_frame)
+
+
+# await n physics frames
+static func physics_frames(target_frames_count: int) -> _FramesAwaiter:
+	return _FramesAwaiter.new(target_frames_count, Engine.get_main_loop().physics_frame)
+
+
+
+class _FramesAwaiter extends RefCounted:
+	signal done()
+	signal progress(passed_frames: int, target_frames: int)
+	
+	var _passed_frames_count: int = 0
+	var _target_frames_count: int
+	var _frame_signal: Signal
+	
+	var is_done = false
+	
+	
+	func _init(target_frames_count: int, frame_signal: Signal):
+		_target_frames_count = target_frames_count
+		_frame_signal = frame_signal
+		
+		reference()
+		
+		frame_signal.connect(_on_frame)
+	
+	
+	func _on_frame() -> void:
+		_passed_frames_count += 1
+		progress.emit(_passed_frames_count, _target_frames_count)
+		
+		if _passed_frames_count >= _target_frames_count:
+			is_done = true
+			_frame_signal.disconnect(_on_frame)
+			done.emit()
+			unreference()

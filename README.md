@@ -20,6 +20,7 @@
 
 ## See my other plugins
 
+- [MeshPath3D](https://github.com/MeroVinggen/Godot-MeshPath3D-Plugin)
 - [Projectile on curve 2D](https://github.com/MeroVinggen/Godot-ProjectileOnCurve2DPlugin)
 - [Android Internet Connection State](https://github.com/MeroVinggen/Godot-AndroidInternetConnectionStatePlugin)
 - [
@@ -123,8 +124,14 @@ Awaiter.physics_frames(target_frames_count: int) -> _FramesAwaiter
 ```
 
 
-### Signals
+## Signals
 
 `done(result: Array)` - is emitted after completion (depending on used `method`)
 
 `progress(complete: int, total: int)` - is emitted per complete task
+
+
+## Tutorials
+
+
+- [Base usage example](https://youtu.be/4r9ZDxu5xQQ)
